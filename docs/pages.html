@@ -174,18 +174,12 @@
         function nextPage() {
             if (currentPage < images.length - 1) {
                 showPage(currentPage + 1);
-            } else {
-                // Loop back to first page
-                showPage(0);
             }
         }
         
         function previousPage() {
             if (currentPage > 0) {
                 showPage(currentPage - 1);
-            } else {
-                // Loop to last page
-                showPage(images.length - 1);
             }
         }
         
@@ -198,15 +192,19 @@
             const nextBtn = document.getElementById('nextBtn');
             const prevBtn = document.getElementById('prevBtn');
             
+            // Hide/show next button
             if (currentPage === images.length - 1) {
-                nextBtn.textContent = '↻ Start Over';
+                nextBtn.style.display = 'none';
             } else {
+                nextBtn.style.display = 'block';
                 nextBtn.textContent = 'Next →';
             }
             
+            // Hide/show previous button
             if (currentPage === 0) {
-                prevBtn.textContent = '↻ Go to End';
+                prevBtn.style.display = 'none';
             } else {
+                prevBtn.style.display = 'block';
                 prevBtn.textContent = '← Previous';
             }
         }
