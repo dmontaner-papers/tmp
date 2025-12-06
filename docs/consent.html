@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire - Consent Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .images-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .images-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .content {
+            margin-bottom: 30px;
+            color: #555;
+        }
+        
+        .content h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .content p {
+            margin-bottom: 15px;
+        }
+        
+        .consent-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-container:hover {
+            border-color: #007bff;
+            background-color: #f8f9ff;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        
+        .checkbox-container label {
+            cursor: pointer;
+            color: #333;
+            font-size: 16px;
+            user-select: none;
+        }
+        
+        .start-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 50px;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .start-button.enabled {
+            background-color: #007bff;
+            cursor: pointer;
+        }
+        
+        .start-button.enabled:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        .start-button.enabled:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .images-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .images-container img {
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Research Study Questionnaire</h1>
+        
+        <div class="images-container">
+            <img src="images/img_a.png" alt="Study Image A">
+            <img src="images/img_d.png" alt="Study Image D">
+        </div>
+        
+        <div class="content">
+            <h2>Welcome to Our Study</h2>
+            <p>
+                Thank you for your interest in participating in this research study. 
+                This questionnaire will present you with a series of images, and we will 
+                ask you to provide your responses for each one.
+            </p>
+            <p>
+                The questionnaire should take approximately 10-15 minutes to complete. 
+                You can navigate through the images using the navigation buttons or by 
+                swiping on touch devices.
+            </p>
+        </div>
+        
+        <div class="consent-section">
+            <h2>Terms and Conditions</h2>
+            <p>
+                By participating in this study, you acknowledge that:
+            </p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Your participation is voluntary and you may withdraw at any time</li>
+                <li>Your responses will be kept confidential and used for research purposes only</li>
+                <li>You are at least 18 years of age</li>
+                <li>You have read and understood the information provided</li>
+            </ul>
+        </div>
+        
+        <div class="checkbox-container" onclick="toggleCheckbox()">
+            <input type="checkbox" id="consentCheckbox" onchange="updateButton()">
+            <label for="consentCheckbox">
+                I have read and agree to the terms and conditions, and I consent to participate in this research study.
+            </label>
+        </div>
+        
+        <button class="start-button" id="startButton" onclick="startQuestionnaire()" disabled>
+            Start Questionnaire
+        </button>
+    </div>
+    
+    <script>
+        function toggleCheckbox() {
+            const checkbox = document.getElementById('consentCheckbox');
+            checkbox.checked = !checkbox.checked;
+            updateButton();
+        }
+        
+        function updateButton() {
+            const checkbox = document.getElementById('consentCheckbox');
+            const button = document.getElementById('startButton');
+            
+            if (checkbox.checked) {
+                button.classList.add('enabled');
+                button.disabled = false;
+            } else {
+                button.classList.remove('enabled');
+                button.disabled = true;
+            }
+        }
+        
+        function startQuestionnaire() {
+            const checkbox = document.getElementById('consentCheckbox');
+            if (checkbox.checked) {
+                // Navigate to questionnaire page
+                window.location.href = 'questionnaire.html';
+            }
+        }
+        
+        // Prevent clicking checkbox label from double-toggling
+        document.getElementById('consentCheckbox').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>
