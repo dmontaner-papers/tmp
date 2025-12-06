@@ -35,17 +35,12 @@
         }
         
         .images-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
         
         .images-container img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
-            max-height: 300px;
             object-fit: contain;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -149,12 +144,7 @@
             }
             
             .images-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .images-container img {
-                max-height: 200px;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -164,6 +154,9 @@
         
         <div class="images-container">
             <img src="images/img_a.png" alt="Study Image A">
+        </div>
+        
+        <div class="images-container">
             <img src="images/img_d.png" alt="Study Image D">
         </div>
         
