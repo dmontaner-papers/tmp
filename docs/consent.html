@@ -167,7 +167,7 @@
             </p>
         </div>
 
-        <div class="checkbox-container" onclick="toggleCheckbox()">
+        <div class="checkbox-container" onclick="toggleCheckbox(event)">
             <input type="checkbox" id="consentCheckbox" onchange="updateButton()">
             <label for="consentCheckbox">
                 I consent to take part and understand my anonymous responses will be used for research and evaluation.
@@ -180,7 +180,11 @@
     </div>
     
     <script>
-        function toggleCheckbox() {
+        function toggleCheckbox(event) {
+            // Only toggle if clicking on the container itself, not checkbox or label
+            if (event && (event.target.id === 'consentCheckbox' || event.target.tagName === 'LABEL')) {
+                return;
+            }
             const checkbox = document.getElementById('consentCheckbox');
             checkbox.checked = !checkbox.checked;
             updateButton();
@@ -206,11 +210,6 @@
                 window.location.href = 'questionnaire.html';
             }
         }
-        
-        // Prevent clicking checkbox label from double-toggling
-        document.getElementById('consentCheckbox').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
     </script>
 </body>
 </html>
