@@ -52,6 +52,14 @@ def get_rectangle(img_id, rectangle_id):
             print("SOMETHING MISSING")
 
     fig, ax = plt.subplots()
+
+    # Make fullscreen
+    manager = plt.get_current_fig_manager()
+    manager.full_screen_toggle()  # Toggle fullscreen mode
+    # OR use one of these alternatives:
+    # manager.window.showMaximized()  # For Qt backend (maximized window)
+    # manager.resize(*manager.window.maxsize())  # For Tk backend
+
     plt.subplots_adjust(left=0, right=1, top=1, bottom=0.18)
     ax.imshow(img)
 
