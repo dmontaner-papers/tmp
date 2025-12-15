@@ -1,20 +1,35 @@
+import os
+import json
 import pandas as pd
+import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-img_file = "docs/images/img01.png"
-regions_file = "regions/regions_img01.json"
 
-img = mpimg.imread(img_file)
-tot_ht, tot_wd, _ = img.shape
+os.makedirs("regions", exist_ok=True)
+regions_file = "regions/regions.json"
+
+if os.path.exists(regions_file):
+    print("reloading")
+    df = pd.read_json(regions_file, lines=True)
+    df.index = df["label"]
+else:
+    print("new df")
+    df = pd.DataFrame(columns=["x1", "y1", "x2", "y2", "label"])
 
 
-df = pd.read_json(regions_file)
-df = df[['label', 'x1', 'y1', 'x2', 'y2']].rename(columns={"label": "hotspot"})
-df['question'] = df['hotspot'].str.split("_").str[0]
-df['response'] = df['hotspot'].str.split("_").str[1].str.split(".").str[0].astype(int)
-df[['q', 'r']] = df['hotspot'].str.replace('q', '').str.split("_", expand=True).astype(float)
-df = df.sort_values(['q', 'r'])
-df
+df[["question", "response"]] = df["label"].str.replace("r", "").str.split("_", expand=True)
+
+df[["tot_ht", "tot_wd"]] = pd.NA
+
+for img_id in df["question"].unique():
+    print(img_id)
+    img_file = f"docs/images/img{img_id}.png"
+    img = mpimg.imread(img_file)
+    tot_ht, tot_wd, _ = img.shape
+
+    df.loc[df.question == img_id, "tot_ht"] = tot_ht
+    df.loc[df.question == img_id, "tot_wd"] = tot_wd
+
 
 df["wd"] = df["x2"] - df["x1"]
 df["ht"] = df["y2"] - df["y1"]
@@ -25,8 +40,27 @@ df["height"] = (100 * df["ht"] / tot_ht).round(2).astype(str) + "%"
 df["left"] = (100 * df["x1"] / tot_wd).round(2).astype(str) + "%"
 df["top"]  = (100 * df["y1"] / tot_ht).round(2).astype(str) + "%"
 
-mycols = ['hotspot', 'question', 'response', 'left', 'top', 'width', 'height']
-template = '    <div class="overlay" id="{hotspot}" question="{group}" response={response} style="position: absolute; left: {left}; top: {top}; width: {width}; height: {height};"><span class="check-icon">✔️</span></div>'
+df["polygon"] = '0% 0%, 100% 0%, 100% 100%, 0% 100%'  # full rectangle
 
-for _, hotspot, group, response, left, top, width, height in df[mycols].itertuples():
-    print(template.format(hotspot=hotspot, group=group, response=response, left=left, top=top, width=width, height=height))
+
+json_data = {}
+for i, img_id in enumerate(df["question"].unique()):
+    print(i, img_id)
+    json_data[i] = df.rename(columns={"label": "id"}).loc[
+        df.question == img_id,
+        [
+            "id",
+            "question",
+            "response",
+            "left",
+            "top",
+            "width",
+            "height",
+            "polygon",
+        ]
+    ].to_dict(orient="records")
+
+json_data
+
+with open("docs/overlays.json", "wt") as fou:
+    json.dump(json_data, fou, indent=2)

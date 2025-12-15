@@ -162,6 +162,12 @@
     <div id="pagesContainer"></div>
 
     <script>
+
+        // init pages
+        let currentPage = 0;
+        let startX = 0;
+        let startY = 0;
+      
         // Add your image filenames here
         const images = [
             'images/img01.png',
@@ -180,112 +186,25 @@
             'images/img14.png',
             'images/img15.png',
         ];
+
+        async function loadOverlays() {
+            const response = await fetch('overlays.json');
+            const imageOverlays = await response.json();
+            console.log(imageOverlays);
+            return imageOverlays;
+        }
         
-        // Define overlays for specific images
-        const imageOverlays = {
-            0: [ // img01.png (index 0)
-                { 
-                    id: 'q1_1', 
-                    question: 'q1', 
-                    response: 1, 
-                    left: '10%', 
-                    top: '20%', 
-                    width: '8%', 
-                    height: '5%',
-                    polygon: '50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%' // 5-point star
-                },
-                { 
-                    id: 'q1_2', 
-                    question: 'q1', 
-                    response: 2, 
-                    left: '30%', 
-                    top: '40%', 
-                    width: '6%', 
-                    height: '4%',
-                    polygon: '0% 0%, 100% 0%, 100% 100%, 0% 100%' // rectangle
-                },
-                { 
-                    id: 'q1_3', 
-                    question: 'q1', 
-                    response: 3, 
-                    left: '60%', 
-                    top: '60%', 
-                    width: '7%', 
-                    height: '5%',
-                    polygon: '50% 0%, 100% 100%, 0% 100%' // triangle
-                },
-                { 
-                    id: 'q2_1', 
-                    question: 'q2', 
-                    response: 1, 
-                    left: '80%', 
-                    top: '30%', 
-                    width: '8%', 
-                    height: '6%',
-                    polygon: '50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%' // hexagon
-                },
-            ],
-            9: [ // img10.png (index 9)
-                { 
-                    id: 'q1_1', 
-                    question: 'q1', 
-                    response: 1, 
-                    left: '10%', 
-                    top: '20%', 
-                    width: '8%', 
-                    height: '5%',
-                    polygon: '0% 0%, 100% 0%, 100% 100%, 0% 100%' // rectangle
-                },
-                { 
-                    id: 'q1_2', 
-                    question: 'q1', 
-                    response: 2, 
-                    left: '30%', 
-                    top: '40%', 
-                    width: '6%', 
-                    height: '4%',
-                    polygon: '0% 0%, 100% 0%, 100% 100%, 0% 100%' // rectangle
-                },
-                { 
-                    id: 'q1_3', 
-                    question: 'q1', 
-                    response: 3, 
-                    left: '60%', 
-                    top: '60%', 
-                    width: '7%', 
-                    height: '5%',
-                    polygon: '0% 0%, 100% 0%, 100% 100%, 0% 100%' // rectangle
-                },
-                { 
-                    id: 'q2_1', 
-                    question: 'q2', 
-                    response: 1, 
-                    left: '80%', 
-                    top: '30%', 
-                    width: '8%', 
-                    height: '6%',
-                    polygon: '0% 0%, 100% 0%, 100% 100%, 0% 100%' // rectangle
-                },
-            ]
-            // Add more images and their overlays here
-            // All overlays must have a polygon property
-        };
-        
-        let currentPage = 0;
-        let startX = 0;
-        let startY = 0;
-        
-        // Generate pages
+        loadOverlays().then(imageOverlays => {
         const container = document.getElementById('pagesContainer');
-        images.forEach((img, index) => {
-            const page = document.createElement('div');
-            page.className = 'page';
-            page.id = `page-${index}`;
-            
-            // Create image container with overlays
-            let overlaysHtml = '';
-            if (imageOverlays[index]) {
-                overlaysHtml = imageOverlays[index].map(overlay => `
+            images.forEach((img, index) => {
+                const page = document.createElement('div');
+                page.className = 'page';
+                page.id = `page-${index}`;
+                
+                // Create image container with overlays
+                let overlaysHtml = '';
+                if (imageOverlays[index]) {
+                    overlaysHtml = imageOverlays[index].map(overlay => `
                     <div class="overlay" 
                          id="${overlay.id}" 
                          data-question="${overlay.question}" 
@@ -295,15 +214,16 @@
                         <span class="check-icon">✔️</span>
                     </div>
                 `).join('');
-            }
-            
-            page.innerHTML = `
+                }
+                
+                page.innerHTML = `
                 <div class="image-container">
                     <img src="${img}" alt="Page ${index + 1}">
                     ${overlaysHtml}
                 </div>
             `;
-            container.appendChild(page);
+                container.appendChild(page);
+            });
         });
         
         // Show first page
