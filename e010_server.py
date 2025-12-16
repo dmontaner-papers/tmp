@@ -2,8 +2,8 @@ import http.server
 import socketserver
 import os
 
-PORT = 8000
-DIRECTORY = "docs"  # folder to serve
+PORT = 8001
+DIRECTORY = "/home/dmontaner/code/2025/dominik_2/docs"  # folder to serve
 
 os.chdir(DIRECTORY)
 
