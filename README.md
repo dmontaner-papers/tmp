@@ -9,3 +9,4 @@
    This step can be skipped if you run `d030_scale_regions_as_rectangles.py`.
 6. I use `d040_capture_regions_for_overlay.py`
 7. `d050_scale_regions_as_polygons.py` generates all the rectangles and internal polygons in the `docs/overlays.json` file.
+
