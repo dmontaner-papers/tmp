@@ -167,7 +167,7 @@
         let currentPage = 0;
         let startX = null;
         let startY = null;
-        const userResponses = {};
+        const userResponses = JSON.parse(sessionStorage.getItem('userResponses')) || {};
       
         // Add your image filenames here
         const images = [
@@ -246,6 +246,7 @@
             console.log(`Question: ${question}, Response: ${response}`);
 
             userResponses[question] = response;
+            sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
             console.log("Current responses:", userResponses);
         }
         

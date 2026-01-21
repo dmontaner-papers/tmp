@@ -206,6 +206,13 @@
         function startQuestionnaire() {
             const checkbox = document.getElementById('consentCheckbox');
             if (checkbox.checked) {
+                // Initialize responses with consent
+                const userResponses = {
+                    consent: true,
+                    consent_timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
+
                 // Navigate to questionnaire page
                 window.location.href = 'questionnaire.html';
             }
