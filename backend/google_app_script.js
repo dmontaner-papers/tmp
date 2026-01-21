@@ -4,9 +4,11 @@ function doPost(e) {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Responses");
     
     const ts = new Date();
-    const row = [ts, data.role || '', data.age || ''];
-    for (let i = 1; i <= 15; i++) {
-      row.push(data["q" + i] || '');
+    const row = [ts, data.consent || '', data.consent_timestamp || ''];
+    // const questionIds = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15"];
+    const questionIds = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
+    for (let id of questionIds) {
+      row.push(data[id] || '');
     }
     sheet.appendRow(row);
     
