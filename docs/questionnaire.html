@@ -167,6 +167,7 @@
         let currentPage = 0;
         let startX = null;
         let startY = null;
+        const userResponses = {};
       
         // Add your image filenames here
         const images = [
@@ -243,6 +244,9 @@
             // Store the response (you can expand this to save to a data structure)
             const response = overlay.getAttribute('data-response');
             console.log(`Question: ${question}, Response: ${response}`);
+
+            userResponses[question] = response;
+            console.log("Current responses:", userResponses);
         }
         
         function showPage(index) {
