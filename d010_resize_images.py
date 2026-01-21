@@ -72,7 +72,7 @@ def resize_image(input_path, output_path, max_width=1200, max_height=1200, quali
 def main():
     # Define paths
     input_dir = Path("images_raw")
-    output_dir = Path("src/images")
+    output_dir = Path("docs/images")
 
     # Create output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -81,8 +81,7 @@ def main():
     max_width = 600
     max_height = 600
 
-    # Process all PNG and JPG images
-    # image_extensions = ['*.png', '*.jpg', '*.jpeg']
+    # Process PNG images
     image_extensions = ["*.png"]
 
     processed_count = 0
