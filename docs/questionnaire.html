@@ -205,8 +205,11 @@
                 // Create image container with overlays
                 let overlaysHtml = '';
                 if (imageOverlays[index]) {
-                    overlaysHtml = imageOverlays[index].map(overlay => `
-                    <div class="overlay" 
+                    overlaysHtml = imageOverlays[index].map(overlay => {
+                        const isSelected = userResponses[overlay.question] == overlay.response;
+                        const selectedClass = isSelected ? ' selected' : '';
+                        return `
+                    <div class="overlay${selectedClass}"
                          id="${overlay.id}" 
                          data-question="${overlay.question}" 
                          data-response="${overlay.response}"
@@ -214,7 +217,7 @@
                          onclick="selectOverlay('${overlay.id}', '${overlay.question}')">
                         <span class="check-icon">✔️</span>
                     </div>
-                `).join('');
+                `}).join('');
                 }
                 
                 page.innerHTML = `
