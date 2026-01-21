@@ -142,8 +142,8 @@
         ];
         
         let currentPage = 0;
-        let startX = 0;
-        let startY = 0;
+        let startX = null;
+        let startY = null;
         
         // Generate pages
         const container = document.getElementById('pagesContainer');
@@ -228,7 +228,7 @@
         }, { passive: true });
         
         document.addEventListener('touchend', (e) => {
-            if (!startX || !startY) return;
+            if (startX === null || startY === null) return;
             
             const endX = e.changedTouches[0].clientX;
             const endY = e.changedTouches[0].clientY;
@@ -249,8 +249,8 @@
                 }
             }
             
-            startX = 0;
-            startY = 0;
+            startX = null;
+            startY = null;
         }, { passive: true });
     </script>
 </body>
