@@ -229,6 +229,21 @@
             showPage(0);
         });
         
+        // Handle overlay selection
+        function selectOverlay(overlayId, question) {
+            // Deselect all overlays for the same question
+            document.querySelectorAll(`[data-question="${question}"]`).forEach(overlay => {
+                overlay.classList.remove('selected');
+            });
+            
+            // Select the clicked overlay
+            const overlay = document.getElementById(overlayId);
+            overlay.classList.add('selected');
+            
+            // Store the response (you can expand this to save to a data structure)
+            const response = overlay.getAttribute('data-response');
+            console.log(`Question: ${question}, Response: ${response}`);
+        }
         
         function showPage(index) {
             // Hide all pages
@@ -279,22 +294,6 @@
                 prevBtn.style.display = 'block';
                 prevBtn.textContent = '← Previous';
             }
-        }
-        
-        // Handle overlay selection
-        function selectOverlay(overlayId, question) {
-            // Deselect all overlays for the same question
-            document.querySelectorAll(`[data-question="${question}"]`).forEach(overlay => {
-                overlay.classList.remove('selected');
-            });
-            
-            // Select the clicked overlay
-            const overlay = document.getElementById(overlayId);
-            overlay.classList.add('selected');
-            
-            // Store the response (you can expand this to save to a data structure)
-            const response = overlay.getAttribute('data-response');
-            console.log(`Question: ${question}, Response: ${response}`);
         }
         
         // Keyboard navigation
