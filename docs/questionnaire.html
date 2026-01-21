@@ -267,6 +267,41 @@
             console.log("Current responses:", userResponses);
         }
         
+        // Submit responses to API
+        async function submitResponses() {
+            try {
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyT38aR6S0JfMK24m64pJuYPca9WvVN9p1--NSCioCsU_CDQvKVaQgppHrS0Y4SQ0G/exec";
+                const payload = {
+                    ...userResponses,
+                    timestamp: new Date().toISOString()
+                };
+                
+                console.log('Submitting responses:', payload);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    console.log('Success:', result);
+                    alert('Thank you! Your responses have been submitted.');
+                    document.getElementById('submitBtn').style.display = 'none';
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error submitting responses:', error);
+                alert('Error submitting responses: ' + error.message);
+            }
+        }
+
+
         function showPage(index) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
@@ -320,41 +355,7 @@
                 prevBtn.textContent = '← Previous';
             }
         }
-        
-        // Submit responses to API
-        async function submitResponses() {
-            try {
-                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyT38aR6S0JfMK24m64pJuYPca9WvVN9p1--NSCioCsU_CDQvKVaQgppHrS0Y4SQ0G/exec"        
-                const payload = {
-                    ...userResponses,
-                    timestamp: new Date().toISOString()
-                };
-                
-                console.log('Submitting responses:', payload);
-                
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    console.log('Success:', result);
-                    alert('Thank you! Your responses have been submitted.');
-                    document.getElementById('submitBtn').style.display = 'none';
-                } else {
-                    throw new Error(result.error || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error submitting responses:', error);
-                alert('Error submitting responses: ' + error.message);
-            }
-        }
-        
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') {
