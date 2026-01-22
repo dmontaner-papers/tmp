@@ -270,7 +270,8 @@
         // Submit responses to API
         async function submitResponses() {
             try {
-                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyT38aR6S0JfMK24m64pJuYPca9WvVN9p1--NSCioCsU_CDQvKVaQgppHrS0Y4SQ0G/exec";
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNgZMxNSjeRKdi8AHCGbF5bm_0Bg9tDeJazSK2635LCue04A3R9kUY0spxCYQOM32U/exec";
+            
                 const payload = {
                     ...userResponses,
                     timestamp: new Date().toISOString()
@@ -278,12 +279,15 @@
                 
                 console.log('Submitting responses:', payload);
                 
+                // Convert to form data
+                const formData = new URLSearchParams();
+                for (const [key, value] of Object.entries(payload)) {
+                    formData.append(key, value);
+                }
+                
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
                 
                 const result = await response.json();
