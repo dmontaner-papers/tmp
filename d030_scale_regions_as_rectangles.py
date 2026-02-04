@@ -1,3 +1,4 @@
+# THIS SCRIPT IS NOT NEEDED ANY MORE
 import os
 import json
 import pandas as pd
@@ -62,5 +63,6 @@ for i, img_id in enumerate(df["question"].unique()):
 
 json_data
 
-with open("docs/overlays.json", "wt") as fou:
-    json.dump(json_data, fou, indent=2)
+# NO NEED TO SAVE
+# with open("docs/overlays.json", "wt") as fou:
+#     json.dump(json_data, fou, indent=2)
