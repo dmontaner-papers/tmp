@@ -8,11 +8,11 @@ os.makedirs("regions", exist_ok=True)
 regions_file = "regions/regions.json"
 
 if os.path.exists(regions_file):
-    print("reloading")
+    print("reloading", flush=True)
     df = pd.read_json(regions_file, lines=True)
     df.index = df["label"]
 else:
-    print("new df")
+    print("new df", flush=True)
     df = pd.DataFrame(columns=["x1", "y1", "x2", "y2", "label"])
 
 
