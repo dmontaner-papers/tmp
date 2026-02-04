@@ -10,7 +10,8 @@ df = pd.read_json(regions_file, lines=True)
 df.index = df["label"]
 
 if "polygon" in df.columns:
-    df = df[df.polygon.isna()]
+    # df = df[df.polygon.isna()]
+    pass
 else:
     df['polygon'] = pd.NA
 
@@ -88,7 +89,7 @@ def get_polygon(img_id, polygon_id):
     return region
 
 
-for label in df["label"]:
+for label in df.loc[df.polygon.isna(), "label"]:
     print(label)
     img_id = label.replace("r", "").split("_")[0]
     res = get_polygon(img_id=img_id, polygon_id=label)
