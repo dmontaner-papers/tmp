@@ -34,15 +34,17 @@ for img_id in df["question"].unique():
     df.loc[df.question == img_id, "tot_ht"] = tot_ht
     df.loc[df.question == img_id, "tot_wd"] = tot_wd
 
+df["tot_ht"] = df["tot_ht"].astype(float)
+df["tot_wd"] = df["tot_wd"].astype(float)
 
 df["wd"] = df["x2"] - df["x1"]
 df["ht"] = df["y2"] - df["y1"]
 
-df["width"]  = (100 * df["wd"] / tot_wd).round(2).astype(str) + "%"
-df["height"] = (100 * df["ht"] / tot_ht).round(2).astype(str) + "%"
+df["width"]  = (100 * df["wd"] / df["tot_wd"]).round(2).astype(str) + "%"
+df["height"] = (100 * df["ht"] / df["tot_ht"]).round(2).astype(str) + "%"
 
-df["left"] = (100 * df["x1"] / tot_wd).round(2).astype(str) + "%"
-df["top"]  = (100 * df["y1"] / tot_ht).round(2).astype(str) + "%"
+df["left"] = (100 * df["x1"] / df["tot_wd"]).round(2).astype(str) + "%"
+df["top"]  = (100 * df["y1"] / df["tot_ht"]).round(2).astype(str) + "%"
 
 
 df = df.rename(columns={"polygon": "polygon_list"})
