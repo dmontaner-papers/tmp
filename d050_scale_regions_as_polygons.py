@@ -1,14 +1,13 @@
+# LATEST RESIZING SCRIPT
 import os
 import json
 import pandas as pd
 import matplotlib.image as mpimg
 
-
 pd.set_option('display.width', 500)
 pd.set_option('display.max_rows', 100)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_colwidth', 100)
-
 
 os.makedirs("regions", exist_ok=True)
 regions_file = "regions/regions.json"
