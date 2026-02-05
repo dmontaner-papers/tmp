@@ -2,9 +2,12 @@
 import os
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+pd.set_option('display.width', 500)
+pd.set_option('display.max_rows', 100)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_colwidth', 100)
 
 os.makedirs("regions", exist_ok=True)
 regions_file = "regions/regions.json"
@@ -64,5 +67,5 @@ for i, img_id in enumerate(df["question"].unique()):
 json_data
 
 # NO NEED TO SAVE
-# with open("docs/overlays.json", "wt") as fou:
-#     json.dump(json_data, fou, indent=2)
+with open("docs/overlays.json", "wt") as fou:
+    json.dump(json_data, fou, indent=2)
