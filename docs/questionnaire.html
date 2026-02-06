@@ -211,7 +211,7 @@
     <div class="page-counter" id="pageCounter"></div>
     <button class="nav-btn prev-btn" id="prevBtn" onclick="previousPage()">← Previous</button>
     <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">Next →</button>
-    <button class="nav-btn submit-btn" id="submitBtn" onclick="submitResponses()" style="display: none;">Submit</button>
+    <button class="nav-btn submit-btn" id="submitBtn" onclick="goToSend()" style="display: none;">Review →</button>
     
     <div id="pagesContainer"></div>
     
@@ -313,42 +313,9 @@
             console.log("Current responses:", userResponses);
         }
         
-        // Submit responses to API
-        async function submitResponses() {
-            try {
-                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTp64au0R_e5BVJ5RZq0-S7JmEwuyBep5M5t9qHsoyYCzrdHQaCAvzE8r2lOlT96sw/exec";
-            
-                const payload = {
-                    ...userResponses,
-                    timestamp: new Date().toISOString()
-                };
-                
-                console.log('Submitting responses:', payload);
-                
-                // Convert to form data
-                const formData = new URLSearchParams();
-                for (const [key, value] of Object.entries(payload)) {
-                    formData.append(key, value);
-                }
-                
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    console.log('Success:', result);
-                    alert('Thank you! Your responses have been submitted.');
-                    document.getElementById('submitBtn').style.display = 'none';
-                } else {
-                    throw new Error(result.error || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error submitting responses:', error);
-                alert('Error submitting responses: ' + error.message);
-            }
+        // Navigate to send.html for review and submission
+        function goToSend() {
+            window.location.href = 'send.html';
         }
 
 

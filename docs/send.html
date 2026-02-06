@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Submit - Questionnaire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+            padding-bottom: 150px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .review-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .review-section:last-child {
+            border-bottom: none;
+        }
+        
+        .review-section h2 {
+            color: #007bff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-item strong {
+            color: #333;
+            margin-right: 15px;
+            min-width: 200px;
+            font-weight: 600;
+        }
+        
+        .review-item span {
+            text-align: right;
+            flex-grow: 1;
+            word-break: break-word;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .back-btn, .submit-btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .back-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        .submit-btn:active, .back-btn:active {
+            transform: translateY(0);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #007bff;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-top: 1px solid #dee2e6;
+            z-index: 999;
+        }
+        
+        .footer img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .back-btn, .submit-btn {
+                width: 100%;
+            }
+            
+            .review-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .review-item strong {
+                min-width: auto;
+            }
+            
+            .review-item span {
+                text-align: left;
+            }
+            
+            .footer {
+                gap: 20px;
+                padding: 15px;
+            }
+            
+            .footer img {
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Review Your Responses</h1>
+        
+        <div class="review-section">
+            <h2>Participant Information</h2>
+            <div class="review-item">
+                <strong>Organization ID:</strong>
+                <span id="reviewOrgId">-</span>
+            </div>
+            <div class="review-item">
+                <strong>User ID:</strong>
+                <span id="reviewUserId">-</span>
+            </div>
+            <div class="review-item">
+                <strong>Consent Given:</strong>
+                <span id="reviewConsent">-</span>
+            </div>
+            <div class="review-item">
+                <strong>Consent Timestamp:</strong>
+                <span id="reviewTimestamp">-</span>
+            </div>
+        </div>
+        
+        <div class="review-section" id="answersSection">
+            <h2>Your Answers</h2>
+            <div id="answersContainer"></div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="back-btn" onclick="goBack()">← Back to Questionnaire</button>
+            <button class="submit-btn" id="submitBtn" onclick="submitResponses()">Submit All Responses</button>
+        </div>
+        
+        <div class="loading" id="loading">Submitting your responses...</div>
+    </div>
+    
+    <div class="footer">
+        <img src="images/logo_brunel.png" alt="Brunel University London">
+        <img src="images/logo_kinetika.png" alt="Kinetika">
+        <img src="images/logo_southbank_centre.png" alt="Southbank Centre">
+    </div>
+    
+    <script>
+        let userResponses = {};
+        
+        // Load responses from sessionStorage
+        function loadResponses() {
+            try {
+                const stored = sessionStorage.getItem('userResponses');
+                if (stored) {
+                    userResponses = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error('Error reading sessionStorage:', e);
+            }
+        }
+        
+        // Populate the review page
+        function populateReview() {
+            loadResponses();
+            
+            // Populate participant information
+            document.getElementById('reviewOrgId').textContent = userResponses.organizationId || '-';
+            document.getElementById('reviewUserId').textContent = userResponses.userId || '-';
+            document.getElementById('reviewConsent').textContent = userResponses.consent ? 'Yes' : 'No';
+            
+            // Format and display timestamp
+            if (userResponses.consent_timestamp) {
+                const date = new Date(userResponses.consent_timestamp);
+                document.getElementById('reviewTimestamp').textContent = date.toLocaleString();
+            } else {
+                document.getElementById('reviewTimestamp').textContent = '-';
+            }
+            
+            // Populate answers
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            let answersFound = false;
+            for (let key in userResponses) {
+                if (key !== 'organizationId' && key !== 'userId' && key !== 'consent' && key !== 'consent_timestamp') {
+                    answersFound = true;
+                    const answerDiv = document.createElement('div');
+                    answerDiv.className = 'review-item';
+                    answerDiv.innerHTML = `<strong>${key}:</strong> <span>${userResponses[key]}</span>`;
+                    answersContainer.appendChild(answerDiv);
+                }
+            }
+            
+            if (!answersFound) {
+                answersContainer.innerHTML = '<p style="color: #999; padding: 20px 0;">No answers recorded yet.</p>';
+            }
+        }
+        
+        // Submit responses to API
+        async function submitResponses() {
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            
+            try {
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTp64au0R_e5BVJ5RZq0-S7JmEwuyBep5M5t9qHsoyYCzrdHQaCAvzE8r2lOlT96sw/exec";
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify(userResponses)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    console.log('Success:', result);
+                    alert('Thank you! Your responses have been submitted successfully.');
+                    // Clear session storage after successful submission
+                    sessionStorage.removeItem('userResponses');
+                    // Redirect to index page
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error submitting responses:', error);
+                alert('Error submitting responses: ' + error.message);
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+        
+        // Go back to questionnaire
+        function goBack() {
+            window.location.href = 'questionnaire.html';
+        }
+        
+        // Initialize page on load
+        window.addEventListener('DOMContentLoaded', populateReview);
+    </script>
+</body>
+</html>
