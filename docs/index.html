@@ -179,7 +179,33 @@
             transform: translateY(0);
         }
         
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .footer img {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+        
         @media (max-width: 768px) {
+            .footer {
+                gap: 20px;
+                margin-top: 40px;
+                padding-top: 20px;
+            }
+            
+            .footer img {
+                height: 45px;
+            }
+        }
             .container {
                 padding: 20px;
             }
@@ -233,6 +259,12 @@
         <button class="start-button" id="startButton" onclick="startQuestionnaire()" disabled>
             Start Questionnaire
         </button>
+        
+        <div class="footer">
+            <img src="images/logo_brunel.png" alt="Brunel University London">
+            <img src="images/logo_southbank_centre.png" alt="Southbank Centre">
+            <img src="images/logo_kinetika.png" alt="Kinetika">
+        </div>
     </div>
     
     <script>
