@@ -136,6 +136,17 @@
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
         
+        .input-group input[type="text"]:read-only {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+            color: #666;
+        }
+        
+        .input-group input[type="text"]:read-only:focus {
+            border-color: #dee2e6;
+            box-shadow: none;
+        }
+        
         .start-button {
             display: block;
             width: 100%;
@@ -225,6 +236,54 @@
     </div>
     
     <script>
+        // Initialize the page and populate fields from URL parameters or sessionStorage
+        function initializePage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orgUrl = urlParams.get('org');
+            const userUrl = urlParams.get('user');
+            
+            // Try to get stored values from sessionStorage
+            let userResponses = {};
+            try {
+                const stored = sessionStorage.getItem('userResponses');
+                if (stored) {
+                    userResponses = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error('Error reading sessionStorage:', e);
+            }
+            
+            // Initialize Organization ID
+            const orgInput = document.getElementById('organizationId');
+            if (orgUrl) {
+                orgInput.value = orgUrl;
+                orgInput.readOnly = true;
+                userResponses.organizationId = orgUrl;
+            } else if (userResponses.organizationId) {
+                orgInput.value = userResponses.organizationId;
+                orgInput.readOnly = false;
+            }
+            
+            // Initialize User ID
+            const userInput = document.getElementById('userId');
+            if (userUrl) {
+                userInput.value = userUrl;
+                userInput.readOnly = true;
+                userResponses.userId = userUrl;
+            } else if (userResponses.userId) {
+                userInput.value = userResponses.userId;
+                userInput.readOnly = false;
+            }
+            
+            // Update sessionStorage with the values (URL params will overwrite if present)
+            if (orgUrl || userUrl) {
+                sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
+            }
+        }
+        
+        // Call initialization when page loads
+        window.addEventListener('DOMContentLoaded', initializePage);
+        
         function toggleCheckbox(event) {
             // Only toggle if clicking on the container itself, not checkbox or label
             if (event && (event.target.id === 'consentCheckbox' || event.target.tagName === 'LABEL')) {
