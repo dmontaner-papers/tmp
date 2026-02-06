@@ -102,6 +102,40 @@
             user-select: none;
         }
         
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .input-group input[type="text"] {
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
         .start-button {
             display: block;
             width: 100%;
@@ -167,6 +201,17 @@
             </p>
         </div>
 
+        <div class="input-container">
+            <div class="input-group">
+                <label for="organizationId">Organization ID</label>
+                <input type="text" id="organizationId" placeholder="Enter your Organization ID">
+            </div>
+            <div class="input-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" placeholder="Enter your User ID">
+            </div>
+        </div>
+
         <div class="checkbox-container" onclick="toggleCheckbox(event)">
             <input type="checkbox" id="consentCheckbox" onchange="updateButton()">
             <label for="consentCheckbox">
@@ -206,8 +251,13 @@
         function startQuestionnaire() {
             const checkbox = document.getElementById('consentCheckbox');
             if (checkbox.checked) {
-                // Initialize responses with consent
+                const organizationId = document.getElementById('organizationId').value;
+                const userId = document.getElementById('userId').value;
+                
+                // Initialize responses with consent and IDs
                 const userResponses = {
+                    organizationId: organizationId,
+                    userId: userId,
                     consent: true,
                     consent_timestamp: new Date().toISOString()
                 };
