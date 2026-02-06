@@ -279,6 +279,13 @@
             if (orgUrl || userUrl) {
                 sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
             }
+            
+            // Initialize consent checkbox
+            const consentCheckbox = document.getElementById('consentCheckbox');
+            if (userResponses.consent === true) {
+                consentCheckbox.checked = true;
+                updateButton();
+            }
         }
         
         // Call initialization when page loads
@@ -313,13 +320,23 @@
                 const organizationId = document.getElementById('organizationId').value;
                 const userId = document.getElementById('userId').value;
                 
-                // Initialize responses with consent and IDs
-                const userResponses = {
-                    organizationId: organizationId,
-                    userId: userId,
-                    consent: true,
-                    consent_timestamp: new Date().toISOString()
-                };
+                // Get existing responses from sessionStorage
+                let userResponses = {};
+                try {
+                    const stored = sessionStorage.getItem('userResponses');
+                    if (stored) {
+                        userResponses = JSON.parse(stored);
+                    }
+                } catch (e) {
+                    console.error('Error reading sessionStorage:', e);
+                }
+                
+                // Update only the consent page fields, preserve all other answers
+                userResponses.organizationId = organizationId;
+                userResponses.userId = userId;
+                userResponses.consent = true;
+                userResponses.consent_timestamp = new Date().toISOString();
+                
                 sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
 
                 // Navigate to questionnaire page

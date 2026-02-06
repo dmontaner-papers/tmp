@@ -183,7 +183,7 @@
         let startY = null;
         const userResponses = JSON.parse(sessionStorage.getItem('userResponses')) || {};
       
-        // Add your image filenames here
+        // image filenames here
         const images = [
             'images/img01.png',
             'images/img02.png',
@@ -328,6 +328,9 @@
         function previousPage() {
             if (currentPage > 0) {
                 showPage(currentPage - 1);
+            } else {
+                // Go back to index page if on first image
+                window.location.href = 'index.html';
             }
         }
         
@@ -351,11 +354,11 @@
                 submitBtn.style.display = 'none';
             }
             
-            // Hide/show previous button
+            // Always show previous button (it goes back to index on first page)
+            prevBtn.style.display = 'block';
             if (currentPage === 0) {
-                prevBtn.style.display = 'none';
+                prevBtn.textContent = '← Back';
             } else {
-                prevBtn.style.display = 'block';
                 prevBtn.textContent = '← Previous';
             }
         }
