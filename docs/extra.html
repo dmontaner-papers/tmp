@@ -227,7 +227,6 @@
         let currentPage = 0;
         let startX = null;
         let startY = null;
-        const userResponses = JSON.parse(sessionStorage.getItem('userResponses')) || {};
       
         // image filenames here
         const images = [
@@ -235,76 +234,28 @@
             'images/img15.png',
         ];
 
-        async function loadOverlays() {
-            const response = await fetch('overlays.json');
-            const imageOverlays = await response.json();
-            console.log(imageOverlays);
-            return imageOverlays;
-        }
-        
-        loadOverlays().then(imageOverlays => {
-            const container = document.getElementById('pagesContainer');
-            images.forEach((img, index) => {
-                const page = document.createElement('div');
-                page.className = 'page';
-                page.id = `page-${index}`;
-                
-                // Create image container with overlays
-                let overlaysHtml = '';
-                if (imageOverlays[index]) {
-                    overlaysHtml = imageOverlays[index].map(overlay => {
-                        const isSelected = userResponses[overlay.question] == overlay.response;
-                        const selectedClass = isSelected ? ' selected' : '';
-                        return `
-                    <div class="overlay${selectedClass}"
-                         id="${overlay.id}" 
-                         data-question="${overlay.question}" 
-                         data-response="${overlay.response}"
-                         style="left: ${overlay.left}; top: ${overlay.top}; width: ${overlay.width}; height: ${overlay.height}; clip-path: polygon(${overlay.polygon});"
-                         onclick="selectOverlay('${overlay.id}', '${overlay.question}')">
-                        <span class="check-icon">✔️</span>
-                    </div>
-                `}).join('');
-                }
-                
-                page.innerHTML = `
-                <div class="image-container">
-                    <img src="${img}" alt="Page ${index + 1}">
-                    ${overlaysHtml}
-                </div>
-            `;
-                container.appendChild(page);
-            });
-        
-            // Show first page
-            showPage(0);
+        // Initialize pages
+        const container = document.getElementById('pagesContainer');
+        images.forEach((img, index) => {
+            const page = document.createElement('div');
+            page.className = 'page';
+            page.id = `page-${index}`;
+            
+            page.innerHTML = `
+            <div class="image-container">
+                <img src="${img}" alt="Page ${index + 1}">
+            </div>
+        `;
+            container.appendChild(page);
         });
-        
-        // Handle overlay selection
-        function selectOverlay(overlayId, question) {
-            // Deselect all overlays for the same question
-            document.querySelectorAll(`[data-question="${question}"]`).forEach(overlay => {
-                overlay.classList.remove('selected');
-            });
-            
-            // Select the clicked overlay
-            const overlay = document.getElementById(overlayId);
-            overlay.classList.add('selected');
-            
-            // Store the response (you can expand this to save to a data structure)
-            const response = overlay.getAttribute('data-response');
-            console.log(`Question: ${question}, Response: ${response}`);
-
-            userResponses[question] = response;
-            sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
-            console.log("Current responses:", userResponses);
-        }
+    
+        // Show first page
+        showPage(0);
         
         // Navigate to send.html for review and submission
         function goToSend() {
             window.location.href = 'send.html';
         }
-
 
         function showPage(index) {
             // Hide all pages
@@ -329,8 +280,8 @@
             if (currentPage > 0) {
                 showPage(currentPage - 1);
             } else {
-                // Go back to index page if on first image
-                window.location.href = 'index.html';
+                // Go back to image 13 (index 12) in questionnaire page
+                window.location.href = 'questionnaire.html?page=12';
             }
         }
         
@@ -354,7 +305,7 @@
                 submitBtn.style.display = 'none';
             }
             
-            // Always show previous button (it goes back to index on first page)
+            // Always show previous button (it goes back to questionnaire on first page)
             prevBtn.style.display = 'block';
             if (currentPage === 0) {
                 prevBtn.textContent = '← Back';
