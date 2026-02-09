@@ -129,6 +129,21 @@
             margin-top: 20px;
         }
         
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .footer {
             position: fixed;
             bottom: 0;
@@ -225,7 +240,10 @@
             <button class="submit-btn" id="submitBtn" onclick="submitResponses()">Submit All Responses</button>
         </div>
         
-        <div class="loading" id="loading">Submitting your responses...</div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            Submitting your responses...
+        </div>
     </div>
     
     <div class="footer">
