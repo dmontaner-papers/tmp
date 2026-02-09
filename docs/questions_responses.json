@@ -16,7 +16,7 @@
         "14": {"n": "14", "text": "How do you feel about taking part in this programme?"},
         "15": {"n": "15", "text": "Is there anything else that we should know?"}
     },
-    "responses": {
+    "response": {
         "1": "Strongly disagree",
         "2": "Disagree",
         "3": "Neither agree nor disagree",
