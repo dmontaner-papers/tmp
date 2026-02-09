@@ -236,6 +236,7 @@
     
     <script>
         let userResponses = {};
+        let questionsData = {};
         
         // Load responses from sessionStorage
         function loadResponses() {
@@ -247,6 +248,31 @@
             } catch (e) {
                 console.error('Error reading sessionStorage:', e);
             }
+        }
+        
+        // Load questions and responses from JSON file
+        async function loadQuestionsData() {
+            try {
+                const response = await fetch('questions_responses.json');
+                questionsData = await response.json();
+            } catch (e) {
+                console.error('Error loading questions data:', e);
+            }
+        }
+        
+        // Get question text from question number
+        function getQuestionText(questionNum) {
+            const questionKey = String(questionNum).padStart(2, '0');
+            const questionData = questionsData.question?.[questionKey];
+            if (questionData) {
+                return `${questionData.n}. ${questionData.text}`;
+            }
+            return `Question ${questionNum}`;
+        }
+        
+        // Get response text from response code
+        function getResponseText(responseCode) {
+            return questionsData.response?.[responseCode] || responseCode;
         }
         
         // Populate the review page
@@ -276,7 +302,12 @@
                     answersFound = true;
                     const answerDiv = document.createElement('div');
                     answerDiv.className = 'review-item';
-                    answerDiv.innerHTML = `<strong>${key}:</strong> <span>${userResponses[key]}</span>`;
+                    
+                    // Try to get question text and response text
+                    const questionText = getQuestionText(key);
+                    const responseText = getResponseText(userResponses[key]);
+                    
+                    answerDiv.innerHTML = `<strong>${questionText}:</strong> <span>${responseText}</span>`;
                     answersContainer.appendChild(answerDiv);
                 }
             }
@@ -328,7 +359,10 @@
         }
         
         // Initialize page on load
-        window.addEventListener('DOMContentLoaded', populateReview);
+        window.addEventListener('DOMContentLoaded', async function() {
+            await loadQuestionsData();
+            populateReview();
+        });
     </script>
 </body>
 </html>
