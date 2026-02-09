@@ -358,19 +358,21 @@
                 
                 if (response.ok) {
                     console.log('Success:', result);
-                    alert('Thank you! Your responses have been submitted successfully.');
                     // Clear session storage after successful submission
                     sessionStorage.removeItem('userResponses');
-                    // Redirect to index page
-                    window.location.href = 'index.html';
+                    // Remove any error messages
+                    sessionStorage.removeItem('submissionError');
+                    // Redirect to done page
+                    window.location.href = 'done.html';
                 } else {
                     throw new Error(result.error || 'Unknown error');
                 }
             } catch (error) {
                 console.error('Error submitting responses:', error);
-                alert('Error submitting responses: ' + error.message);
-                submitBtn.disabled = false;
-                loading.style.display = 'none';
+                // Store error message in sessionStorage
+                sessionStorage.setItem('submissionError', error.message);
+                // Redirect to done page to display error
+                window.location.href = 'done.html';
             }
         }
         
