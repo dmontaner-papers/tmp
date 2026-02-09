@@ -344,9 +344,14 @@
             try {
                 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTp64au0R_e5BVJ5RZq0-S7JmEwuyBep5M5t9qHsoyYCzrdHQaCAvzE8r2lOlT96sw/exec";
                 
+                const formData = new FormData();
+                for (const [key, value] of Object.entries(userResponses)) {
+                    formData.append(key, value);
+                }
+                
                 const response = await fetch(SCRIPT_URL, {
                     method: "POST",
-                    body: JSON.stringify(userResponses)
+                    body: formData
                 });
                 
                 const result = await response.json();
