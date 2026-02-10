@@ -307,7 +307,7 @@
             // Check for page parameter in URL
             const urlParams = new URLSearchParams(window.location.search);
             const pageParam = urlParams.get('page');
-            const startPage = pageParam ? parseInt(pageParam) : 0;
+            const startPage = pageParam ? parseInt(pageParam) - 1 : 0;
             
             // Show specified page or first page
             showPage(startPage);
