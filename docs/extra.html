@@ -50,8 +50,8 @@
         
         .vignette {
             position: absolute;
-            background-color: rgba(255, 0, 0, 0.3);
-            border: 2px solid rgba(255, 0, 0, 0.8);
+            /* background-color: rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.8); */
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -60,27 +60,18 @@
         }
         
         .vignette:hover {
-            background-color: rgba(255, 0, 0, 0.5);
-            border-color: rgba(255, 0, 0, 1);
+            /* background-color: rgba(255, 0, 0, 0.5);
+            border-color: rgba(255, 0, 0, 1); */
         }
         
         .vignette.filled {
-            background-color: rgba(0, 200, 100, 0.3);
-            border: 2px solid rgba(0, 200, 100, 0.8);
+            /* background-color: rgba(0, 200, 100, 0.3);
+            border: 2px solid rgba(0, 200, 100, 0.8); */
         }
         
         .vignette.filled:hover {
-            background-color: rgba(0, 200, 100, 0.5);
-            border-color: rgba(0, 200, 100, 1);
-        }
-        
-        .check-icon {
-            display: none;
-            font-size: 24px;
-        }
-        
-        .vignette.filled .check-icon {
-            display: block;
+            /* background-color: rgba(0, 200, 100, 0.5);
+            border-color: rgba(0, 200, 100, 1); */
         }
         
         .vignette-text {
@@ -420,7 +411,6 @@
                          id="${config.id}"
                          style="left: ${config.left}; top: ${config.top}; width: ${config.width}; height: ${config.height};"
                          onclick="openModal('${config.id}')">
-                        <span class="check-icon">✔️</span>
                         <div class="vignette-text${textVisibleClass}" id="text-${config.id}">${hasText || ''}</div>
                     </div>
                     `;
