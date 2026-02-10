@@ -70,11 +70,26 @@
         
         .check-icon {
             display: none;
-            font-size: 24px;
+            font-size: 32px;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
         }
         
         .overlay.selected .check-icon {
             display: block;
+            animation: pulse 0.3s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         
         .nav-btn {
@@ -273,7 +288,7 @@
                          data-response="${overlay.response}"
                          style="left: ${overlay.left}; top: ${overlay.top}; width: ${overlay.width}; height: ${overlay.height}; clip-path: polygon(${overlay.polygon});"
                          onclick="selectOverlay('${overlay.id}', '${overlay.question}')">
-                        <span class="check-icon">✔️</span>
+                        <span class="check-icon">⭐</span>
                     </div>
                 `}).join('');
                 }
@@ -290,7 +305,7 @@
             // Check for page parameter in URL
             const urlParams = new URLSearchParams(window.location.search);
             const pageParam = urlParams.get('page');
-            const startPage = pageParam ? parseInt(pageParam) - 1 : 0;
+            const startPage = pageParam ? parseInt(pageParam) : 0;
             
             // Show specified page or first page
             showPage(startPage);
