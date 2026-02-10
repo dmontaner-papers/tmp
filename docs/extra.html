@@ -47,7 +47,7 @@
             display: block;
         }
         
-        .overlay {
+        .vignette {
             position: absolute;
             background-color: rgba(255, 0, 0, 0.3);
             border: 2px solid rgba(255, 0, 0, 0.8);
@@ -58,14 +58,19 @@
             justify-content: center;
         }
         
-        .overlay:hover {
+        .vignette:hover {
             background-color: rgba(255, 0, 0, 0.5);
             border-color: rgba(255, 0, 0, 1);
         }
         
-        .overlay.selected {
-            background-color: rgba(0, 255, 0, 0.5);
-            border: 3px solid rgba(0, 200, 0, 1);
+        .vignette.filled {
+            background-color: rgba(0, 200, 100, 0.3);
+            border: 2px solid rgba(0, 200, 100, 0.8);
+        }
+        
+        .vignette.filled:hover {
+            background-color: rgba(0, 200, 100, 0.5);
+            border-color: rgba(0, 200, 100, 1);
         }
         
         .check-icon {
@@ -73,7 +78,7 @@
             font-size: 24px;
         }
         
-        .overlay.selected .check-icon {
+        .vignette.filled .check-icon {
             display: block;
         }
         
@@ -130,6 +135,110 @@
             z-index: 1000;
         }
         
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+        
+        .modal textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn.save {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .modal-btn.save:hover {
+            background-color: #0056b3;
+        }
+        
+        .modal-btn.cancel {
+            background-color: #ddd;
+            color: #333;
+        }
+        
+        .modal-btn.cancel:hover {
+            background-color: #bbb;
+        }
+        
         /* Touch swipe support */
         .page {
             touch-action: pan-y;
@@ -163,6 +272,11 @@
                 right: 15px;
                 padding: 8px 16px;
                 font-size: 14px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
             }
         }
         
@@ -215,6 +329,21 @@
     
     <div id="pagesContainer"></div>
     
+    <!-- Text Input Modal -->
+    <div id="textModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Text</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn save" onclick="saveVignetteText()">Save</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="footer">
         <img src="images/logo_brunel.png" alt="Brunel University London">
         <img src="images/logo_southbank_centre.png" alt="Southbank Centre">
@@ -227,11 +356,26 @@
         let currentPage = 0;
         let startX = null;
         let startY = null;
+        let currentVignetteId = null;
+        
+        const userResponses = JSON.parse(sessionStorage.getItem('userResponses')) || {};
       
         // image filenames here
         const images = [
             'images/img14.png',
             'images/img15.png',
+        ];
+        
+        // Define vignettes for each image (single vignette covering the whole image with margin)
+        const vignetteConfigs = [
+            // Image 14 - single vignette
+            [
+                { id: '14', left: '5%', top: '5%', width: '90%', height: '90%' },
+            ],
+            // Image 15 - single vignette
+            [
+                { id: '15', left: '5%', top: '5%', width: '90%', height: '90%' },
+            ],
         ];
 
         // Initialize pages
@@ -241,9 +385,26 @@
             page.className = 'page';
             page.id = `page-${index}`;
             
+            let vignettesHtml = '';
+            if (vignetteConfigs[index]) {
+                vignettesHtml = vignetteConfigs[index].map(config => {
+                    const hasText = userResponses[config.id];
+                    const filledClass = hasText ? ' filled' : '';
+                    return `
+                    <div class="vignette${filledClass}"
+                         id="${config.id}"
+                         style="left: ${config.left}; top: ${config.top}; width: ${config.width}; height: ${config.height};"
+                         onclick="openModal('${config.id}')">
+                        <span class="check-icon">✔️</span>
+                    </div>
+                    `;
+                }).join('');
+            }
+            
             page.innerHTML = `
             <div class="image-container">
                 <img src="${img}" alt="Page ${index + 1}">
+                ${vignettesHtml}
             </div>
         `;
             container.appendChild(page);
@@ -256,6 +417,41 @@
         
         // Show specified page or first page
         showPage(startPage);
+        
+        // Modal functions
+        function openModal(vignetteId) {
+            currentVignetteId = vignetteId;
+            const textInput = document.getElementById('textInput');
+            textInput.value = userResponses[vignetteId] || '';
+            document.getElementById('textModal').classList.add('active');
+            textInput.focus();
+        }
+        
+        function closeModal() {
+            document.getElementById('textModal').classList.remove('active');
+            currentVignetteId = null;
+        }
+        
+        function saveVignetteText() {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (currentVignetteId) {
+                userResponses[currentVignetteId] = text;
+                sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
+                
+                // Update vignette visual state
+                const vignetteEl = document.getElementById(currentVignetteId);
+                if (text) {
+                    vignetteEl.classList.add('filled');
+                } else {
+                    vignetteEl.classList.remove('filled');
+                }
+                
+                console.log(`Saved vignette ${currentVignetteId}:`, text);
+            }
+            
+            closeModal();
+        }
         
         // Navigate to send.html for review and submission
         function goToSend() {
@@ -319,8 +515,17 @@
             }
         }
 
+        // Close modal when clicking outside
+        document.getElementById('textModal').addEventListener('click', (e) => {
+            if (e.target.id === 'textModal') {
+                closeModal();
+            }
+        });
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
+            if (document.getElementById('textModal').classList.contains('active')) return;
+            
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') {
                 e.preventDefault();
                 nextPage();
