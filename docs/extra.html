@@ -74,6 +74,10 @@
             border-color: rgba(0, 200, 100, 1); */
         }
         
+        .vignette.filled .vignette-hint {
+            display: none;
+        }
+        
         .vignette-text {
             position: absolute;
             top: 50%;
@@ -411,6 +415,7 @@
                          id="${config.id}"
                          style="left: ${config.left}; top: ${config.top}; width: ${config.width}; height: ${config.height};"
                          onclick="openModal('${config.id}')">
+                        <div class="vignette-hint">✏️ Click to add text</div>
                         <div class="vignette-text${textVisibleClass}" id="text-${config.id}">${hasText || ''}</div>
                     </div>
                     `;
