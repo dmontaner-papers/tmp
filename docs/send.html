@@ -224,10 +224,10 @@
                 <strong>Consent Given:</strong>
                 <span id="reviewConsent">-</span>
             </div>
-            <div class="review-item">
+            <!-- <div class="review-item">
                 <strong>Consent Timestamp:</strong>
                 <span id="reviewTimestamp">-</span>
-            </div>
+            </div> -->
         </div>
         
         <div class="review-section" id="answersSection">
@@ -304,12 +304,12 @@
             document.getElementById('reviewConsent').textContent = userResponses.consent ? 'Yes' : 'No';
             
             // Format and display timestamp
-            if (userResponses.consent_timestamp) {
-                const date = new Date(userResponses.consent_timestamp);
-                document.getElementById('reviewTimestamp').textContent = date.toLocaleString();
-            } else {
-                document.getElementById('reviewTimestamp').textContent = '-';
-            }
+            // if (userResponses.consent_timestamp) {
+            //     const date = new Date(userResponses.consent_timestamp);
+            //     document.getElementById('reviewTimestamp').textContent = date.toLocaleString();
+            // } else {
+            //     document.getElementById('reviewTimestamp').textContent = '-';
+            // }
             
             // Populate answers - show all questions from JSON
             const answersContainer = document.getElementById('answersContainer');
