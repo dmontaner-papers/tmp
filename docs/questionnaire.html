@@ -68,21 +68,6 @@
             border: 3px solid rgba(0, 200, 0, 1);
         }
         
-        .check-icon {
-            display: none;
-            font-size: 32px;
-            color: #FFD700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
-            position: relative;
-            z-index: 10;
-        }
-        
-        .overlay.selected .check-icon {
-            display: block;
-            animation: pulse 0.3s ease-out;
-        }
-        
         @keyframes pulse {
             0% {
                 transform: scale(0.8);
@@ -92,6 +77,22 @@
                 transform: scale(1);
                 opacity: 1;
             }
+        }
+                
+        #floating-star {
+            display: none;
+            position: absolute;
+            font-size: 32px;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
+        #floating-star.visible {
+            display: block;
+            animation: pulse 0.3s ease-out;
         }
         
         .nav-btn {
@@ -244,6 +245,7 @@
         let currentPage = 0;
         let startX = null;
         let startY = null;
+        let imageOverlays = [];
         const userResponses = JSON.parse(sessionStorage.getItem('userResponses')) || {};
       
         // image filenames here
@@ -270,7 +272,8 @@
             return imageOverlays;
         }
         
-        loadOverlays().then(imageOverlays => {
+        loadOverlays().then(loadedOverlays => {
+            imageOverlays = loadedOverlays;
             const container = document.getElementById('pagesContainer');
             images.forEach((img, index) => {
                 const page = document.createElement('div');
@@ -290,15 +293,28 @@
                          data-response="${overlay.response}"
                          style="left: ${overlay.left}; top: ${overlay.top}; width: ${overlay.width}; height: ${overlay.height}; clip-path: polygon(${overlay.polygon});"
                          onclick="selectOverlay('${overlay.id}', '${overlay.question}')">
-                        <span class="check-icon">⭐</span>
                     </div>
                 `}).join('');
                 }
-                
+
+                let starHtml = '';
+                console.log("loaded page:", index)
+                if (imageOverlays[index]) {
+                    const selectedOverlay = imageOverlays[index].find(overlay => {
+                        return userResponses[overlay.question] == overlay.response;
+                    });
+                    if (selectedOverlay && selectedOverlay.starTop && selectedOverlay.starLeft) {
+                        starHtml = '<span id="floating-star" class="floating-star visible" style="top: ' + selectedOverlay.starTop + '; left: ' + selectedOverlay.starLeft + ';">⭐</span>';
+                    } else {
+                        starHtml = '<span id="floating-star" class="floating-star">⭐</span>';
+                    }
+                }
+
                 page.innerHTML = `
                 <div class="image-container">
                     <img src="${img}" alt="Page ${index + 1}">
                     ${overlaysHtml}
+                    ${starHtml}
                 </div>
             `;
                 container.appendChild(page);
@@ -312,7 +328,7 @@
             // Show specified page or first page
             showPage(startPage);
         });
-        
+
         // Handle overlay selection
         function selectOverlay(overlayId, question) {
             // Deselect all overlays for the same question
@@ -330,7 +346,11 @@
 
             userResponses[question] = response;
             sessionStorage.setItem('userResponses', JSON.stringify(userResponses));
-            console.log("Current responses:", userResponses);
+
+            const star = document.querySelector(`#page-${currentPage} #floating-star`);
+            star.style.top = imageOverlays[currentPage].find(ov => ov.id === overlay.id).starTop;
+            star.style.left = imageOverlays[currentPage].find(ov => ov.id === overlay.id).starLeft;
+            star.classList.add('visible');
         }
         
         // Navigate to send.html for review and submission
