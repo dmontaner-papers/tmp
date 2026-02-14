@@ -1,6 +1,7 @@
 # LATEST RESIZING SCRIPT
 import os
 import json
+import numpy as np
 import pandas as pd
 import matplotlib.image as mpimg
 
@@ -63,6 +64,13 @@ for i, r in df.iterrows():
         df.loc[i, "polygon"] = ", ".join(polygon_string_list)
 
 
+# bckkp
+df["_starTop"] = df["starTop"]
+df["_starLeft"] = df["starLeft"]
+
+df["starLeft"] = (100 * df["_starLeft"] / df["tot_wd"]).round(2).astype(str) + "%"
+df["starTop"]  = (100 * df["_starTop"] / df["tot_ht"]).round(2).astype(str) + "%"
+
 json_data = {}
 for i, img_id in enumerate(df["question"].unique()):
     print(i, img_id)
@@ -76,6 +84,8 @@ for i, img_id in enumerate(df["question"].unique()):
             "top",
             "width",
             "height",
+            "starTop",
+            "starLeft",
             "polygon",
         ]
     ].to_dict(orient="records")
