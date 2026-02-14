@@ -82,10 +82,8 @@
         #floating-star {
             display: none;
             position: absolute;
-            font-size: 32px;
-            color: #FFD700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+            font-size: 64px;
+            color: #000000;
             z-index: 10000;
             pointer-events: none;
             transform: translate(-50%, -50%);
@@ -304,9 +302,9 @@
                         return userResponses[overlay.question] == overlay.response;
                     });
                     if (selectedOverlay && selectedOverlay.starTop && selectedOverlay.starLeft) {
-                        starHtml = '<span id="floating-star" class="floating-star visible" style="top: ' + selectedOverlay.starTop + '; left: ' + selectedOverlay.starLeft + ';">⭐</span>';
+                        starHtml = '<span id="floating-star" class="floating-star visible" style="top: ' + selectedOverlay.starTop + '; left: ' + selectedOverlay.starLeft + ';">✔</span>';
                     } else {
-                        starHtml = '<span id="floating-star" class="floating-star">⭐</span>';
+                        starHtml = '<span id="floating-star" class="floating-star">✔</span>';
                     }
                 }
 
