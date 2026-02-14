@@ -49,8 +49,8 @@
         
         .overlay {
             position: absolute;
-            background-color: rgba(255, 0, 0, 0.3);
-            border: 2px solid rgba(255, 0, 0, 0.8);
+            /* background-color: rgba(255, 0, 0, 0.3); */
+            /* border: 2px solid rgba(255, 0, 0, 0.8); */
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -58,15 +58,15 @@
             justify-content: center;
         }
         
-        .overlay:hover {
+        /* .overlay:hover {
             background-color: rgba(255, 0, 0, 0.5);
             border-color: rgba(255, 0, 0, 1);
-        }
+        } */
         
-        .overlay.selected {
+        /* .overlay.selected {
             background-color: rgba(0, 255, 0, 0.5);
             border: 3px solid rgba(0, 200, 0, 1);
-        }
+        } */
         
         @keyframes pulse {
             0% {
@@ -229,7 +229,7 @@
     <div class="page-counter" id="pageCounter"></div>
     <button class="nav-btn prev-btn" id="prevBtn" onclick="previousPage()">← Previous</button>
     <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">Next →</button>
-    <button class="nav-btn submit-btn" id="submitBtn" onclick="goToSend()" style="display: none;">Review →</button>
+    <button class="nav-btn next-btn" id="submitBtn" onclick="goToSend()" style="display: none;">Next →</button>
     
     <div id="pagesContainer"></div>
     
