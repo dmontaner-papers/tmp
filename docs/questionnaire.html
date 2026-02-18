@@ -134,6 +134,11 @@
             background-color: rgba(0, 123, 255, 0.95);
         }
         
+        #homeBtn {
+            left: 30px;
+            right: auto;
+        }
+        
         .page-counter {
             position: fixed;
             top: 20px;
@@ -225,9 +230,10 @@
 </head>
 <body>
     <div class="page-counter" id="pageCounter"></div>
-    <button class="nav-btn prev-btn" id="prevBtn" onclick="previousPage()">← Previous</button>
+    <button class="nav-btn prev-btn" id="prevBtn" onclick="previousPage()" style="display: none;">← Previous</button>
+    <button class="nav-btn submit-btn" id="homeBtn" onclick="goToHome()" style="display: none;">← Back</button>
     <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">Next →</button>
-    <button class="nav-btn next-btn" id="submitBtn" onclick="goToSend()" style="display: none;">Next →</button>
+    <button class="nav-btn submit-btn" id="reviewBtn" onclick="goToReview()" style="display: none;">Review →</button>
     
     <div id="pagesContainer"></div>
     
@@ -351,9 +357,14 @@
             star.classList.add('visible');
         }
         
-        // Navigate to send.html for review and submission
-        function goToSend() {
+        // Navigate to extra.html for review
+        function goToReview() {
             window.location.href = 'extra.html';
+        }
+        
+        // Navigate to index page
+        function goToHome() {
+            window.location.href = 'index.html';
         }
 
 
@@ -379,9 +390,6 @@
         function previousPage() {
             if (currentPage > 0) {
                 showPage(currentPage - 1);
-            } else {
-                // Go back to index page if on first image
-                window.location.href = 'index.html';
             }
         }
         
@@ -393,24 +401,25 @@
         function updateButton() {
             const nextBtn = document.getElementById('nextBtn');
             const prevBtn = document.getElementById('prevBtn');
-            const submitBtn = document.getElementById('submitBtn');
+            const homeBtn = document.getElementById('homeBtn');
+            const reviewBtn = document.getElementById('reviewBtn');
             
-            // Hide/show next button and show submit on last page
-            if (currentPage === images.length - 1) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'block';
+            // Show homeBtn on first page, prevBtn on other pages
+            if (currentPage === 0) {
+                homeBtn.style.display = 'block';
+                prevBtn.style.display = 'none';
             } else {
-                nextBtn.style.display = 'block';
-                nextBtn.textContent = 'Next →';
-                submitBtn.style.display = 'none';
+                homeBtn.style.display = 'none';
+                prevBtn.style.display = 'block';
             }
             
-            // Always show previous button (it goes back to index on first page)
-            prevBtn.style.display = 'block';
-            if (currentPage === 0) {
-                prevBtn.textContent = '← Back';
+            // Hide/show next button and show review on last page
+            if (currentPage === images.length - 1) {
+                nextBtn.style.display = 'none';
+                reviewBtn.style.display = 'block';
             } else {
-                prevBtn.textContent = '← Previous';
+                nextBtn.style.display = 'block';
+                reviewBtn.style.display = 'none';
             }
         }
 
@@ -419,7 +428,7 @@
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') {
                 e.preventDefault();
                 if (currentPage === images.length - 1) {
-                    goToSend();
+                    goToReview();
                 } else {
                     nextPage();
                 }
@@ -449,9 +458,9 @@
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > 50) { // Minimum swipe distance
                     if (diffX > 0) {
-                        // Swipe left - next page or submit
+                        // Swipe left - next page or review
                         if (currentPage === images.length - 1) {
-                            goToSend();
+                            goToReview();
                         } else {
                             nextPage();
                         }
