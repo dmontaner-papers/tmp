@@ -46,3 +46,12 @@ HERE GOOGLE ASKS FOR AUTHORIZATION
    - The script automatically parses it and appends a new row to your "Responses" sheet
 
 **That's it!** Each submission will add a new row with all the response data.
+
+
+User Journey 
+
+1. index.html
+1. questionnaire.html
+1. extras.html
+1. send.html
+1. done.html
