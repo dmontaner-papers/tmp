@@ -418,7 +418,11 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') {
                 e.preventDefault();
-                nextPage();
+                if (currentPage === images.length - 1) {
+                    goToSend();
+                } else {
+                    nextPage();
+                }
             }
             if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
                 e.preventDefault();
@@ -445,8 +449,12 @@
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > 50) { // Minimum swipe distance
                     if (diffX > 0) {
-                        // Swipe left - next page
-                        nextPage();
+                        // Swipe left - next page or submit
+                        if (currentPage === images.length - 1) {
+                            goToSend();
+                        } else {
+                            nextPage();
+                        }
                     } else {
                         // Swipe right - previous page
                         previousPage();
