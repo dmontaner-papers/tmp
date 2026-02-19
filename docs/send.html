@@ -379,7 +379,9 @@
             loading.style.display = 'block';
             
             try {
-                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTp64au0R_e5BVJ5RZq0-S7JmEwuyBep5M5t9qHsoyYCzrdHQaCAvzE8r2lOlT96sw/exec";
+
+                const DeploymentID = userResponses.organizationId || 'AKfycbyTp64au0R_e5BVJ5RZq0-S7JmEwuyBep5M5t9qHsoyYCzrdHQaCAvzE8r2lOlT96sw';
+                const SCRIPT_URL = `https://script.google.com/macros/s/${DeploymentID}/exec`;
                 
                 const formData = new FormData();
                 for (const [key, value] of Object.entries(userResponses)) {
